@@ -90,3 +90,5 @@ Images are automatically published to Docker Hub with tags based on the shortene
 ## Author
 
 Anoushka
+
+## CI/CD pipeline tested
