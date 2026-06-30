@@ -1,6 +1,6 @@
 spring:
   data:
     mongodb:
-      database: Book
-      host: javatechiemongodb
-      port: 27017
+      database: ${MONGO_DATABASE}
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}

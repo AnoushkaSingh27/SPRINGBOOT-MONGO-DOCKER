@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo
+    container_name: javatechiemongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  app:
+    build: .
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DATABASE: Book
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongodb_data:
