@@ -1,6 +1,14 @@
 spring:
   data:
     mongodb:
-      database: ${MONGO_DATABASE}
-      host: ${MONGO_HOST}
-      port: ${MONGO_PORT}
+      uri: ${SPRING_DATA_MONGODB_URI}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: never

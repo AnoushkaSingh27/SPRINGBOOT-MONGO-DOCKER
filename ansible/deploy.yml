@@ -1,0 +1,57 @@
+---
+- hosts: droplet
+  become: yes
+
+  tasks:
+  - name: Update package cache
+    apt:
+      update_cache: yes
+  
+  - name: Install Docker
+    apt:
+      name: docker.io
+      state: present
+  
+  - name: Install Docker Compose
+    apt:
+      name: docker-compose-plugin
+      state: present
+  
+  - name: Start Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
+  
+  - name: Pull Docker image
+    docker_image:
+      name: "anoushka27/springboot-mongo-docker"
+      tag: "{{ image_tag }}"
+      source: pull
+  
+  - name: Create application directory
+    file:
+      path: /opt/app
+      state: directory
+  
+  - name: Copy Docker Compose file
+    copy:
+      src: ../docker-compose.yml
+      dest: /opt/app/docker-compose.yml
+  
+  - name: Create environment file
+    copy:
+      dest: /opt/app/.env
+      content: |
+        IMAGE_TAG={{ image_tag }}
+        SPRING_DATA_MONGODB_URI={{ mongodb_uri }}
+  
+  - name: Pull latest Docker images
+    command: docker compose pull
+    args:
+      chdir: /opt/app
+
+  - name: Start application stack
+    command: docker compose up -d --remove-orphans
+    args:
+      chdir: /opt/app

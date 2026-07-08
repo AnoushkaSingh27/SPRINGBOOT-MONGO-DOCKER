@@ -49,3 +49,19 @@ jobs:
           tags: anoushka27/springboot-mongo-docker:${{ env.SHORT_SHA }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      
+
+      - name: Configure SSH
+        if: github.event_name == 'push'
+        run: |
+            echo "SSH configuration will be added in Day 7"
+      
+      - name: Install Ansible
+        if: github.event_name == 'push'
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Verify Ansible Installation
+        if: github.event_name == 'push'
+        run: ansible --version
